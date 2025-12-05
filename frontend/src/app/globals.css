@@ -1,6 +1,6 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');@import "tailwindcss";
-
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+@import "tailwindcss";
+@import "tailwindcss";
 
 @layer theme, base, components, utilities;
 
@@ -20,17 +20,18 @@
 body {
   background: black;
   font-family: var(--font-ubuntu);
+  color: white;
 }
 
 /** Typography **/
 
 h1 {
   font-size: 3rem;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 h2 {
   font-size: 2rem;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 h3 {
   font-size: 1rem;
@@ -40,4 +41,43 @@ h3 {
 p {
   font-size: 0.8rem;
   color: white;
+}
+
+/** Forms **/
+form {
+  color-scheme: dark; /*dette hjalp med at gøre dato ikon hvid*/
+
+  select {
+    cursor: pointer;
+    color-scheme: inherit;
+
+    option {
+      @apply bg-neutral-800;
+    }
+  }
+}
+
+/* General styling */
+.form-field {
+  @apply grid grid-cols-2 grid-rows-[auto] border-white border-solid border-[1px] items-center p-3 px-5 text-lg;
+}
+
+.form-input {
+  @apply justify-items-stretch
+  border-b border-b-black rounded p-1 pl-5 cursor-pointer
+  hover:bg-neutral-700 focus:bg-neutral-800;
+  outline: none;
+}
+.is-filled {
+@apply bg-neutral-900;
+}
+
+
+.form-comment {
+  @apply  min-h-[20vh] field-sizing-content !grid-cols-1 !text-left;
+}
+
+.form-button {
+  @apply uppercase place-self-end p-2 w-50 border-2 border-black border-y-white cursor-pointer hover:text-[var(--pink)] hover:border-y-[var(--pink)]
+  md:col-span-2 ;
 }
