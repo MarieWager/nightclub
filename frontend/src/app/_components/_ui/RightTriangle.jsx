@@ -1,8 +1,20 @@
+// Here used CSS instead of Tailwind here because I couldn’t get it to work like the left triangle 
+//clipPath cuts the element into a triangle using three points
+
+
 export default function RightTriangle() {
   return (
     <div
-      className="absolute right-0 top-0 w-0 h-0 border-t-[32px] border-l-[32px] border-l-transparent"
-      style={{ borderTopColor: "var(--pink)" }}
+      style={{
+        position: "absolute",
+        right: 0,
+        bottom: 0,
+        width: "32px",
+        height: "32px",
+        background: "var(--pink)",
+        clipPath: "polygon(100% 0, 100% 100%, 0 100%)",
+      }}
     />
   );
 }
+

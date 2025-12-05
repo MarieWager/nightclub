@@ -20,7 +20,10 @@
 body {
   background: black;
   font-family: var(--font-ubuntu);
+
+  overflow-x: hidden;
   color: white;
+
 }
 
 /** Typography **/
