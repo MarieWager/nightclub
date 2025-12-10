@@ -1,5 +1,6 @@
 import "./globals.css";
 import Nav from "./_components/Nav.jsx";
+import Footer from "./_components/Footer";
 
 export const metadata = {
   title: "Night Club",
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
         <Nav />
 
         {children}
+        <Footer />
       </body>
     </html>
   );
