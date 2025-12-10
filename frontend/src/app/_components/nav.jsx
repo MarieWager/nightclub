@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation"; //has {} because usePathname comes directly from the Next library
 import LeftTriangle from "./_ui/LeftTriangle";
 import RightTriangle from "./_ui/RightTriangle";
-import TitleLine from "./TitleLine";
 
 //I made the links as an array so the Navbar can generate them dynamically using .map()
 //label is the text shown in the menu

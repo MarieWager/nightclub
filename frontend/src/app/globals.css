@@ -14,7 +14,7 @@
   --font-ubuntu: "Ubuntu", sans-serif;
 
   /* Active/hover line (linear gradient) */
-  --pinkLine: linear-gradient(90deg, rgba(255,42,112,0), rgba(255,42,112,1) 52%, rgba(255,42,112,0));
+  --pinkLine: linear-gradient(90deg, rgba(255, 42, 112, 0), rgba(255, 42, 112, 1) 52%, rgba(255, 42, 112, 0));
 }
 
 body {
@@ -32,13 +32,18 @@ h1 {
   text-transform: uppercase;
 }
 
-
 h2 {
   font-size: 2rem;
   text-transform: uppercase;
 }
 h3 {
   font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+h4 {
+  font-size: 0.8rem;
   color: var(--pink);
 }
 
@@ -64,6 +69,9 @@ form {
 /* General styling */
 .form-field {
   @apply grid grid-cols-2 grid-rows-[auto] border-white border-solid border-[1px] items-center p-3 px-5 text-lg;
+  label {
+    color: rgba(255, 255, 255, 0.5);
+  }
 }
 
 .form-input {
@@ -71,6 +79,9 @@ form {
   border-b border-b-black rounded p-1 pl-5 cursor-pointer
   hover:bg-neutral-700 focus:bg-neutral-800;
   outline: none;
+}
+.form-input::placeholder {
+  color: white;
 }
 .is-filled {
   @apply bg-neutral-900;

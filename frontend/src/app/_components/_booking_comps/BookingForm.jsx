@@ -23,13 +23,13 @@ export default function BookingForm() {
         {/* Name */}
         <div className="form-field">
           <label htmlFor="name">Your Name</label>
-          <input id="name" type="text" {...register("Your Name", { required: true })} className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} />
+          <input id="name" type="text" placeholder="Spritney Biers" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Your Name", { required: true })} />
         </div>
 
         {/* Email */}
         <div className="form-field">
           <label htmlFor="email">Your Email</label>
-          <input id="email" type="text" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Your Email", { required: true })} />
+          <input id="email" type="text" placeholder="mail@gmail.com" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Your Email", { required: true })} />
         </div>
 
         {/* Table Number */}
@@ -40,7 +40,7 @@ export default function BookingForm() {
 
         <div className="form-field">
           <label htmlFor="table">Table Number</label>
-          <input id="table" type="number" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} min={1} max={15} {...register("Table Number", { required: true, max: 15 })} />
+          <input id="table" type="number" placeholder="1-15" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} min={1} max={15} {...register("Table Number", { required: true, max: 15 })} />
           {/*ved at tilføje min/max her vil user ikke kunne vælge højere end 15
             uden vil det kun være efter submit/validering at der React siger der er fejl*/}
         </div>
@@ -54,16 +54,16 @@ export default function BookingForm() {
         <div className="form-field">
           <label htmlFor="guests">Number of Guests</label>
           <select id="guests" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Number of Guests", { required: true })}>
-            <option value="" disabled selected hidden /*disse tre gør at denne option ikke bliver vist eller kan vælges ved drop-down*/>
-              choose
+            <option value="" disabled hidden /*disse tre gør at denne option ikke bliver vist eller kan vælges ved drop-down*/>
+              min 1, max 8
             </option>
-            <option value="1">1</option>
-            <option value="2"> 2</option>
-            <option value="3"> 3</option>
-            <option value="4"> 4</option>
-            <option value="5"> 5</option>
-            <option value="6"> 6</option>
-            <option value="7"> 7</option>
+            <option value="1">1</option> <hr />
+            <option value="2"> 2</option> <hr />
+            <option value="3"> 3</option> <hr />
+            <option value="4"> 4</option> <hr />
+            <option value="5"> 5</option> <hr />
+            <option value="6"> 6</option> <hr />
+            <option value="7"> 7</option> <hr />
             <option value="8"> 8</option>
           </select>
         </div>
@@ -77,7 +77,7 @@ export default function BookingForm() {
         {/* Phone */}
         <div className="form-field">
           <label htmlFor="phone">Your Mobile Number</label>
-          <input id="phone" type="tel" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Your Mobile Number", { required: true })} />
+          <input id="phone" type="tel" placeholder="12 34 56 78" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("Your Mobile Number", { required: true })} />
         </div>
 
         {/* Comment */}
