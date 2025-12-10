@@ -1,6 +1,7 @@
 import "./globals.css";
 import Nav from "./_components/Nav.jsx";
 import Footer from "./_components/Footer";
+import NewsletterForm from "./_components/NewsletterForm"
 
 export const metadata = {
   title: "Night Club",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
         <Nav />
 
         {children}
+        <NewsletterForm />
         <Footer />
       </body>
     </html>

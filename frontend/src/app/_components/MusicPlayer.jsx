@@ -1,12 +1,10 @@
-
-//UI improvement gap between images
+// UI: music player section
 
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Volume2, Shuffle } from "lucide-react"; //othe icons usual emoji
-
+import { Volume2, Shuffle } from "lucide-react";
 
 const TRACKS = [
   {
@@ -30,120 +28,115 @@ const TRACKS = [
 ];
 
 export default function MusicPlayer() {
-  // which track is currently selected
+  // current track index
   const [index, setIndex] = useState(0);
 
-  // play / pause state
+  // play / pause
   const [playing, setPlaying] = useState(false);
 
-  // audio timing
+  // time + duration
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // volume slider state
+  // volume 0–1
   const [volume, setVolume] = useState(0.8);
 
-  // mix track feature
+  // shuffle on/off
   const [shuffle, setShuffle] = useState(false);
 
-  // UI status: loading / idle (ready to play) / error
+  // loading / idle / error state
   const [status, setStatus] = useState("idle");
 
-  // ref to <audio> element
+  // audio element ref
   const audioRef = useRef(null);
 
-  // currently playing track
+  // current track data
   const track = TRACKS[index];
 
-  // convert seconds mm:ss
+  // format seconds -> mm:ss
   const format = (s = 0) => {
     const m = Math.floor(s / 60).toString().padStart(2, "0");
     const sec = Math.floor(s % 60).toString().padStart(2, "0");
     return `${m}:${sec}`;
   };
 
-  // pick a random track that is not the current one
+  // random track (not same as current)
   const playRandomTrack = () => {
     let random;
     do {
       random = Math.floor(Math.random() * TRACKS.length);
-    } while (random === index); // avoid picking the same track
+    } while (random === index);
 
     setIndex(random);
-    setPlaying(true); // autoplay after shuffle
+    setPlaying(true);
   };
 
-  // go to next track
+  // next track
   const next = () => {
     if (shuffle) {
-      playRandomTrack(); // mix mode
+      playRandomTrack();
     } else {
-      setIndex((i) => (i + 1) % TRACKS.length); // loop playlist
-      setPlaying(true); // autoplay next
+      setIndex((i) => (i + 1) % TRACKS.length);
+      setPlaying(true);
     }
   };
 
-  // go to previous track
+  // previous track
   const prev = () => {
-    setIndex((i) => (i === 0 ? TRACKS.length - 1 : i - 1)); // loop backwards
-    setPlaying(true); // autoplay
+    setIndex((i) => (i === 0 ? TRACKS.length - 1 : i - 1));
+    setPlaying(true);
   };
 
-  // turn shuffle on/off
   const toggleShuffle = () => setShuffle((prev) => !prev);
 
-  // when user drags progress bar
+  // progress bar seek
   const seek = (e) => {
     const v = Number(e.target.value);
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.currentTime = v; // jump audio to new time
+    audio.currentTime = v;
     setTime(v);
   };
 
-  
-
-  // LOAD + SETUP AUDIO
-  
+  // load audio when track changes
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    setStatus("loading"); 
-    setTime(0); // reset time
-    audio.load(); // reload new audio source
+    setStatus("loading");
+    setTime(0);
+    audio.load();
 
-    // when duration is ready
     const onLoaded = () => {
       setDuration(audio.duration || 0);
-      setStatus("idle"); // ready to play
+      setStatus("idle");
 
-      if (playing) audio.play().catch(() => setStatus("error"));
+      if (playing) {
+        audio.play().catch(() => setStatus("error"));
+      }
     };
 
-    // update progress bar while playing
-    const onTime = () => setTime(audio.currentTime || 0);
+    const onTime = () => {
+      setTime(audio.currentTime || 0);
+    };
 
-    // auto-play next track when this one ends
     const onEnded = () => {
-      setIndex((i) => (i + 1) % TRACKS.length); // go next
-      setPlaying(true); // autoplay next track
+      // auto play next
+      setIndex((i) => (i + 1) % TRACKS.length);
+      setPlaying(true);
     };
 
-    // error handler 
     const onError = () => {
       setStatus("error");
       setPlaying(false);
     };
 
-    // attach event listeners
     audio.addEventListener("loadedmetadata", onLoaded);
     audio.addEventListener("timeupdate", onTime);
     audio.addEventListener("ended", onEnded);
     audio.addEventListener("error", onError);
 
-    // cleanup
     return () => {
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("timeupdate", onTime);
@@ -152,14 +145,12 @@ export default function MusicPlayer() {
     };
   }, [index, playing]);
 
-  
-  // PLAY / PAUSE + VOLUME CONTROL
-  
+  // play / pause + volume
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.volume = volume; // update volume
+    audio.volume = volume;
 
     if (playing && status === "idle") {
       audio.play().catch(() => setStatus("error"));
@@ -171,17 +162,16 @@ export default function MusicPlayer() {
   return (
     <section className="bg-black py-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 lg:flex-row">
-        
-        {/* big image of current track */}
+        {/* big cover image */}
         <div className="relative h-64 w-full overflow-hidden rounded-lg lg:h-80 lg:w-1/2">
           <Image src={track.cover} alt={track.title} fill className="object-cover" />
         </div>
 
-        {/* player UI */}
+        {/* player side */}
         <div className="flex w-full flex-col justify-between lg:w-1/2">
           <h3 className="text-xl font-semibold text-white">{track.title}</h3>
 
-          {/* progress bar */}
+          {/* progress */}
           <div className="mt-6">
             <input
               type="range"
@@ -189,7 +179,7 @@ export default function MusicPlayer() {
               max={duration || 0}
               value={time}
               onChange={seek}
-              disabled={status !== "idle"} // disable while loading
+              disabled={status !== "idle"}
               className="w-full accent-[var(--pink)]"
             />
             <div className="mt-1 flex justify-between text-xs text-[var(--grey)]">
@@ -200,15 +190,14 @@ export default function MusicPlayer() {
 
           {/* main controls */}
           <div className="mt-6 flex items-center justify-center gap-6 text-white">
-            
-            {/* previous */}
+            {/* prev */}
             <button onClick={prev} className="text-xl hover:text-[var(--pink)]">
               ⏮
             </button>
 
             {/* play / pause */}
             <button
-              onClick={() => setPlaying((p) => !p)} // toggle play state
+              onClick={() => setPlaying((p) => !p)}
               className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white text-2xl hover:border-[var(--pink)] hover:text-[var(--pink)]"
             >
               {playing ? "⏸" : "▶"}
@@ -219,10 +208,10 @@ export default function MusicPlayer() {
               ⏭
             </button>
 
-            {/* mix button */}
-            <button onClick={toggleShuffle} title="Mix Track">
+            {/* shuffle */}
+            <button onClick={toggleShuffle} title="Mix track">
               <Shuffle
-                className={`w-6 h-6 ${
+                className={`h-6 w-6 ${
                   shuffle ? "text-[var(--pink)]" : "text-white"
                 }`}
               />
@@ -230,7 +219,7 @@ export default function MusicPlayer() {
 
             {/* volume */}
             <div className="flex items-center gap-2">
-              <Volume2 className="w-5 h-5 text-white" />
+              <Volume2 className="h-5 w-5 text-white" />
               <input
                 type="range"
                 min={0}
@@ -243,18 +232,21 @@ export default function MusicPlayer() {
             </div>
           </div>
 
-          {/* loading / error messages */}
+          {/* status text */}
           <div className="mt-4 min-h-[1.5rem] text-sm">
-            {status === "loading" && <p className="text-[var(--grey)]">Loading...</p>}
+            {status === "loading" && (
+              <p className="text-[var(--grey)]">Loading...</p>
+            )}
             {status === "error" && (
-              <p className="text-red-400">We cannot play this track. Please refresh.</p>
+              <p className="text-red-400">
+                We cannot play this track. Please refresh.
+              </p>
             )}
           </div>
 
-          {/* thumbnail images */}
+          {/* small covers */}
           <div className="mt-4 flex items-center justify-center gap-4">
-            
-            {/* prev arrow (desktop only) */}
+            {/* prev arrow (desktop) */}
             <button
               onClick={prev}
               className="hidden h-12 w-12 items-center justify-center border-2 border-white text-white hover:bg-white/5 md:flex"
@@ -267,12 +259,12 @@ export default function MusicPlayer() {
                 <button
                   key={t.id}
                   onClick={() => {
-                    setIndex(idx); // change track on click
-                    setPlaying(true); // autoplay
+                    setIndex(idx);
+                    setPlaying(true);
                   }}
                   className={`relative h-24 min-w-[90px] overflow-hidden rounded-sm ${
                     idx === index
-                      ? "ring-4 ring-[var(--pink)]" // pink active border !!!needs to be change to animation later !!!!
+                      ? "ring-4 ring-[var(--pink)]"
                       : "opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -286,25 +278,21 @@ export default function MusicPlayer() {
               ))}
             </div>
 
-            {/* next arrow (desktop only) */}
+            {/* next arrow (desktop) */}
             <button
               onClick={next}
               className="hidden h-12 w-12 items-center justify-center border-2 border-white text-white hover:bg-white/5 md:flex"
             >
               ▶
             </button>
-
           </div>
         </div>
       </div>
 
-      {/* audio playback element */}
+      {/* audio element */}
       <audio ref={audioRef}>
         <source src={track.audio} />
       </audio>
     </section>
   );
 }
-
-
-
