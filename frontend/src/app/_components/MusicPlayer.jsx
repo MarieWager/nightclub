@@ -247,12 +247,16 @@ export default function MusicPlayer() {
           {/* small covers */}
           <div className="mt-4 flex items-center justify-center gap-4">
             {/* prev arrow (desktop) */}
-            <button
-              onClick={prev}
-              className="hidden h-12 w-12 items-center justify-center border-2 border-white text-white hover:bg-white/5 md:flex"
-            >
-              ◀
-            </button>
+           <button
+  onClick={prev}
+  className="hidden h-12 w-12 items-center justify-center 
+             border-2 border-white text-white 
+             hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
+             md:flex"
+>
+  ◀
+</button>
+
 
             <div className="flex flex-1 gap-2 overflow-x-auto">
               {TRACKS.map((t, idx) => (
@@ -279,12 +283,16 @@ export default function MusicPlayer() {
             </div>
 
             {/* next arrow (desktop) */}
-            <button
-              onClick={next}
-              className="hidden h-12 w-12 items-center justify-center border-2 border-white text-white hover:bg-white/5 md:flex"
-            >
-              ▶
-            </button>
+          <button
+  onClick={next}
+  className="hidden h-12 w-12 items-center justify-center 
+             border-2 border-white text-white 
+             hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
+             md:flex"
+>
+  ▶
+</button>
+
           </div>
         </div>
       </div>
