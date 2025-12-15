@@ -1,4 +1,3 @@
-// UI: music player section
 
 "use client";
 
@@ -249,7 +248,7 @@ export default function MusicPlayer() {
             {/* prev arrow (desktop) */}
            <button
   onClick={prev}
-  className="hidden h-12 w-12 items-center justify-center 
+  className="hidden h-8 w-8 items-center justify-center 
              border-2 border-white text-white 
              hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
              md:flex"
@@ -285,7 +284,7 @@ export default function MusicPlayer() {
             {/* next arrow (desktop) */}
           <button
   onClick={next}
-  className="hidden h-12 w-12 items-center justify-center 
+  className="hidden h-8 w-8 items-center justify-center 
              border-2 border-white text-white 
              hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
              md:flex"
