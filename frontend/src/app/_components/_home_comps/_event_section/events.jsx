@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import TitleLine from "../../TitleLine";
+import { FaSquareFull } from "react-icons/fa";
+
 import RightTriangle from "../../_ui/newRightTriangle";
 
 export default function Events() {
   const [events, setEvent] = useState([]);
   const [slideIndex, setSlideIndex] = useState(0);
-
-  const performance = events;
+  const [itemsPerSlide, setItemsPerSlide] = useState(2);
 
   useEffect(() => {
     async function getEvents() {
@@ -25,23 +27,42 @@ export default function Events() {
   }, []);
 
   useEffect(() => {
-    if (events.length < 3) return;
+    function handleResize() {
+      if (window.innerWidth < 768) {
+        setItemsPerSlide(1); // mobile
+      } else {
+        setItemsPerSlide(2); // desktop
+      }
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (events.length < itemsPerSlide) return;
 
     const interval = setInterval(() => {
-      setSlideIndex((prev) => (prev + 2 >= events.length ? 0 : prev + 2));
-    });
+      setSlideIndex((prev) => (prev + itemsPerSlide >= events.length ? 0 : prev + itemsPerSlide));
+    }, 30000);
 
     return () => clearInterval(interval);
-  }, [events]);
+  }, [events, itemsPerSlide]);
+
+  const performance = events;
+  const visibleEvents = performance.slice(slideIndex, slideIndex + itemsPerSlide);
+  const slideCount = Math.ceil(events.length / itemsPerSlide);
 
   return (
     <>
       <div className="grid grid-cols-1 grid-rows-1">
         <Image src="/slider_bg.png" alt="Event background" width={1600} height={700} className="h-full w-fit object-cover row-start-1 col-start-1"></Image>
-        <main className="grid md:grid-cols-2 grid-rows-[auto] gap-y-10 gap-x-5 max-w-7xl row-start-1 col-start-1 mx-auto px-4 py-4">
+        <main className="grid md:grid-cols-2 grid-rows-[auto] gap-y-10 gap-x-5 max-w-7xl row-start-1 col-start-1 mx-auto px-4 py-8">
           <TitleLine title="events of the month" className="col-span-2 place-self-center text-center" />
 
-          {performance.slice(slideIndex, slideIndex + 2).map((event) => (
+          {visibleEvents.map((event) => (
             <main key={event.id} className="mx-auto px-4">
               <section className="grid grid-cols-1 grid-rows-1">
                 <Image src={event.asset.url} alt={event.title} width={1600} height={1400} className="z-0 row-start-1 col-start-1 object-cover"></Image>
@@ -64,6 +85,14 @@ export default function Events() {
               </section>
             </main>
           ))}
+
+          <section className="col-span-2 flex justify-center gap-3 mt-5">
+            {Array.from({ length: slideCount }).map((_, i) => (
+              <button key={i} onClick={() => setSlideIndex(i * itemsPerSlide)} className={slideIndex === i * itemsPerSlide ? "text-[#FF2A70]" : "text-white"}>
+                <FaSquareFull />
+              </button>
+            ))}
+          </section>
         </main>
       </div>
     </>
