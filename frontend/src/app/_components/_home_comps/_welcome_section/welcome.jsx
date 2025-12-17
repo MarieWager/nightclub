@@ -37,7 +37,7 @@ export default function Welcome() {
   return (
     <main className="grid grid-cols-1 sm:grid-cols-3 max-w-6xl place-self-center gap-x-6 gap-y-8 p-5 md:p-10 lg:px-20">
       {OFFERS.map((offer) => (
-        <section key={offer.id} className="grid grid-cols-1 grid-rows-1 min-h-90 sm:h-100 max-w-[305px] md:max-w-full gap-2 place-self-center" onPointerEnter={() => setActiveId(offer.id)} onPointerLeave={() => setActiveId(null)} onPointerDown={() => setActiveId((prev) => (prev === offer.id ? null : offer.id))} onFocus={() => setActiveId(offer.id)} onBlur={() => setActiveId(null)} tabIndex={0}>
+        <section key={offer.id} className="grid grid-cols-1 grid-rows-1 min-h-90 max-w-[305px] md:max-w-full gap-2 place-self-center" onPointerEnter={() => setActiveId(offer.id)} onPointerLeave={() => setActiveId(null)} onPointerDown={() => setActiveId((prev) => (prev === offer.id ? null : offer.id))} onFocus={() => setActiveId(offer.id)} onBlur={() => setActiveId(null)} tabIndex={0}>
           {/*bg img*/}
           <WelAnimation isActive={activeId === offer.id} className="row-start-1 col-start-1 z-0 h-full w-full" animation="bgChange" target={<Image src={offer.img} alt={`Picture of ${offer.title}`} width={400} height={800} className="h-full w-full object-cover pointer-events-none" />} />
 
@@ -57,7 +57,7 @@ export default function Welcome() {
             <WelAnimation isActive={activeId === offer.id} className="place-self-center" animation="titleZoom" target={<p className="uppercase text-center text-2xl font-bold tracking-[0.5em]">{offer.title}</p>}></WelAnimation>
 
             {/*text*/}
-            <WelAnimation isActive={activeId === offer.id} className="place-self-center" animation="textMove" target={<p className="text-center text-pretty">{offer.text}</p>}></WelAnimation>
+            <WelAnimation isActive={activeId === offer.id} className="place-self-center p-3 sm:p-5" animation="textMove" target={<p className="text-center text-pretty">{offer.text}</p>}></WelAnimation>
 
             {/*right tri*/}
             <EvAnimation isActive={activeId === offer.id} className="place-self-end border-l-transparent border-b-[#FF2A70] row-start-5 col-start-1" animation="triRightGrow" target={<div className="place-self-end border-[#FF2A70]"></div>}></EvAnimation>
