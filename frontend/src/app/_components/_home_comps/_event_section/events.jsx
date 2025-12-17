@@ -53,7 +53,7 @@ export default function Events() {
           <TitleLine title="events of the month" className="col-span-2 place-self-center text-center" />
 
           {visibleEvents.map((event) => (
-            <main key={event.id} className="grid grid-cols-1 grid-rows-[auto] mx-auto px-4" onPointerEnter={() => setActiveId(event.id)} onPointerLeave={() => setActiveId(null)} onPointerDown={() => setActiveId(event.id)} onFocus={() => setActiveId(event.id)} onBlur={() => setActiveId(null)} tabIndex={0}>
+            <main key={event.id} className="grid grid-cols-1 grid-rows-[auto] mx-auto px-4" onPointerEnter={() => setActiveId(event.id)} onPointerLeave={() => setActiveId(null)} onPointerDown={() => setActiveId((prev) => (prev === event.id ? null : event.id))} onFocus={() => setActiveId(event.id)} onBlur={() => setActiveId(null)} tabIndex={0}>
               <section className="grid grid-cols-1 grid-rows-1">
                 <EvAnimation isActive={activeId === event.id} className="h-full w-full border-y-transparent border-[#FF2A70] row-start-1 col-start-1" animation="bgBlur" target={<Image src={event.asset.url} alt={event.title} width={1600} height={1400} className="h-full w-full object-cover pointer-events-none" />}></EvAnimation>
 
