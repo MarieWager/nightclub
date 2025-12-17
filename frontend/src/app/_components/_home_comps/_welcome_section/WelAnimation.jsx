@@ -99,6 +99,7 @@ const textMove = {
 
 const triRight = {
   idle: {
+    zIndex: -1,
     opacity: 0,
     x: 10,
     transition: {
@@ -108,6 +109,7 @@ const triRight = {
     },
   },
   active: {
+    zIndex: 10,
     opacity: [0, 0.1, 1],
     x: 0,
     transition: {
@@ -126,6 +128,7 @@ const triRight = {
 
 const triLeft = {
   idle: {
+    zIndex: -1,
     opacity: 0,
     x: -10,
     transition: {
@@ -135,6 +138,7 @@ const triLeft = {
     },
   },
   active: {
+    zIndex: 10,
     opacity: [0, 0.1, 1],
     x: 0,
     transition: {
@@ -160,7 +164,7 @@ const variantMap = {
   triLeft,
 };
 
-export default function Animation({ isActive, animation = "", target, className = "" }) {
+export default function WelAnimation({ isActive, animation = "", target, className = "" }) {
   const variants = variantMap[animation];
 
   return (
@@ -182,48 +186,4 @@ export default function Animation({ isActive, animation = "", target, className 
     return target;
     } 
   
-
-
-
-return (
-    <motion.div className="relative grid grid-cols-1 grid-rows-[auto] min-h-95 sm:h-100 md:h-[110%] max-w-[305px] md:max-w-full gap-2 place-self-center bg-cover bg-center" onMouseEnter={() => setIsActive(true)} onMouseLeave={() => setIsActive(false)} onFocus={() => setIsActive(true)} onBlur={() => setIsActive(false)} tabIndex={0}>
-      <AnimatePresence>
-        <motion.div className="absolute inset-0" variants={bgChange} initial="idle" animate={isActive ? "active" : "idle"}>
-          <Image src={img} alt={`Picture of ${title}`} fill className="object-cover object-center pointer-events-none" />
-        </motion.div>
-      </AnimatePresence>
-
-      <AnimatePresence>
-        <motion.div className="grid grid-cols-1 grid-rows-[auto]" >
-
-          <article className="relative border-t-2 border-[#FF2A70] ">
-            <LeftTriangle />
-          </article>
-
-          <article className="grid grid-cols-1 grid-rows-[1fr_auto_auto] gap-2 mx-8 lg:my-10 ">
-            <div
-              className="flex w-fit h-fit border-2 border-[#FF2A70] p-[1rem] justify-center place-self-center
-              [&>*]:text-[#FF2A70] [&>*]:h-10 [&>*]:w-10 [&>*]:aspect-square [&>*]: "
-            >
-              {icon}
-            </div>
-
-            <p className="uppercase text-center text-2xl font-bold tracking-[0.5em]">{title}</p>
-
-            <p className="text-center text-pretty">{text}</p>
-         
-            </article>
-         
-          <article className="relative border-b-2 border-[#FF2A70] ">
-            <RightTriangle width={12} height={12} />
-          </article>
-
-        </motion.div>
-
-      </AnimatePresence>
-
-    </motion.div>          
-
-
-
 */
