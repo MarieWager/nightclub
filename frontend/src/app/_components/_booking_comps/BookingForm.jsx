@@ -18,7 +18,7 @@ export default function BookingForm() {
     <>
       <main className="max-w-6xl place-self-center">
         <h1>
-          <b>book a table</b>
+          <b className="text-2xl md:text-4x1">leave a comment</b>
         </h1>
         <form className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto " onSubmit={handleSubmit(onSubmit)}>
           {/* Name */}

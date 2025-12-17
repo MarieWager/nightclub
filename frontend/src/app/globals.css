@@ -74,7 +74,7 @@ p {
 
 form {
   color-scheme: dark; /*dette hjalp med at gøre dato ikon hvid*/
-
+  font-size: 0.8rem;
   select {
     cursor: pointer;
     color-scheme: inherit;
@@ -95,9 +95,10 @@ form {
   padding: 0.75rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  font-size: 1.125rem;
+  font-size: 0.8rem;
   border: 1px solid white;
   outline: none;
+
 
   label {
     color: rgba(255, 255, 255, 0.5);

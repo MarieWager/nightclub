@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function RecentBlogs({ params }) {
+export default function RecentBlogs() {
   const [blogposts, setBlogposts] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function RecentBlogs({ params }) {
       if (!res.ok) throw new Error("Recent Blog Posts failed to load");
       const blogposts = await res.json();
 
-      const postComments = await Promise.all(
+      const amountComments = await Promise.all(
         blogposts.map(async (post) => {
           const res = await fetch(`http://localhost:4000/blogposts/${post.id}?embed=comments`);
 
@@ -30,7 +30,7 @@ export default function RecentBlogs({ params }) {
           };
         })
       );
-      setBlogposts(postComments);
+      setBlogposts(amountComments);
     }
     getAllBlogPosts();
   }, []);
