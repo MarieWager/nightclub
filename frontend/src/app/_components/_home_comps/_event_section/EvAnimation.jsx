@@ -23,20 +23,20 @@ const bgBlur = {
 };
 
 const borderTop = {
-    idle: {
-      opacity: 0,
-      width: 0,
+  idle: {
+    opacity: 0,
+    width: 0,
+  },
+  active: {
+    opacity: 1,
+    zIndex: 100,
+    scale: 1,
+    width: "100%",
+    transition: {
+      type: "tween",
+      duration: 0.6,
+      ease: "easeOut",
     },
-    active: {
-      opacity: 1,
-      zIndex: 100,
-      scale: 1,
-      width: "100%",
-      transition: {
-        type: "tween",
-        duration: 0.6,
-        ease: "easeOut",
-      },
   },
 };
 
