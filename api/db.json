@@ -90,8 +90,7 @@
         "url": "http://localhost:4000/file-bucket/blog_full3.jpg"
       }
     },
-  
-     {
+    {
       "id": 4,
       "title": "Blog Post Title",
       "author": "Admin",
@@ -100,7 +99,7 @@
         "url": "http://localhost:4000/file-bucket/blog_full3.jpg"
       }
     },
-       {
+    {
       "id": 5,
       "title": "Blog Post Title",
       "author": "Admin",
@@ -109,7 +108,7 @@
         "url": "http://localhost:4000/file-bucket/blog_full3.jpg"
       }
     },
-       {
+    {
       "id": 6,
       "title": "Blog Post Title",
       "author": "Admin",
@@ -145,10 +144,7 @@
         "url": "http://localhost:4000/file-bucket/blog_full3.jpg"
       }
     }
-  
-
   ],
-
   "comments": [
     {
       "id": 1,
@@ -324,6 +320,26 @@
       "date": "2025-03-15T20:00:00.000Z",
       "phone": "2342 78986",
       "id": 3
+    },
+    {
+      "name": "Tanya",
+      "email": "tanya.hitra@gmail.com",
+      "table": 12,
+      "guests": "1",
+      "date": "2025-12-25T00:00:00.000Z",
+      "phone": "28970216",
+      "comment": "",
+      "id": 4
+    },
+    {
+      "name": "Tetiana Khytra",
+      "email": "tanya.hitra@gmail.com",
+      "table": 14,
+      "guests": "6",
+      "date": "2025-12-17T00:00:00.000Z",
+      "phone": "28970216",
+      "comment": "",
+      "id": 5
     }
   ],
   "newsletters": [
