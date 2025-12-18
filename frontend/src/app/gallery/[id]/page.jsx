@@ -1,4 +1,6 @@
 import Image from "next/image";
+import LeftTriangle from "@/app/_components/_ui/LeftTriangle";
+import RightTriangle from "@/app/_components/_ui/RightTriangle";
 
 export default async function SinglePhotoPage({ params }) {
   // in new nextjs params is a promise, so we have to await it
@@ -7,7 +9,7 @@ export default async function SinglePhotoPage({ params }) {
   const photoId = Number(id);
 
   // if id in url is not a number
-  if (!photoId) {
+  if (Number.isNaN(photoId)) {
     return (
       <div className="py-40 text-center text-white">
         <h1 className="text-2xl">INVALID PHOTO</h1>
@@ -44,6 +46,9 @@ export default async function SinglePhotoPage({ params }) {
             fill
             className="object-cover object-center"
           />
+
+          <LeftTriangle />
+          <RightTriangle />
 
           {/* close */}
           <a

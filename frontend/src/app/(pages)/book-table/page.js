@@ -5,6 +5,9 @@ import { useParams } from "next/navigation";
 import Banner from "@/app/_components/Banner";
 import React from "react";
 import BookingForm from "@/app/_components/_booking_comps/BookingForm";
+import BookTableSection from "@/app/_components/_booking_comps/BookTableSection";
+
+
 
 export default function BookTable() {
   const [message, setMessage] = useState("");

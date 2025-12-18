@@ -22,6 +22,10 @@ const TABLES = [
 ];
 
 export default function BookingForm({ onSubmitReservation }) {
+import React, { useEffect } from "react"; 
+import { useForm } from "react-hook-form";
+
+export default function BookingForm({ selectedTable, bookedTables, onDateChange }) { // ADDED receive props from parent
   const {
     register,
     handleSubmit,
@@ -30,7 +34,66 @@ export default function BookingForm({ onSubmitReservation }) {
     formState: { errors },
   } = useForm();
 
+    setValue, // ADDEd to update table Number 
+    formState: { errors },
+  } = useForm();
+
+  // ADDED send data to API
+  const onSubmit = async (data) => {
+    // ADDED  do not send if table is already booked
+    if (bookedTables && bookedTables.includes(Number(data["Table Number"]))) {
+      alert("This table is already reserved on that date. Please choose another table.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/reservations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data["Your Name"],
+          email: data["Your Email"],
+          table: data["Table Number"],
+          guests: data["Number of Guests"],
+          date: new Date(data["Select Date"]).toISOString(), // convert <datwe to ISO string
+          phone: data["Your Mobile Number"],
+          comment: data["Your Comment"] || "",
+        }),
+      });
+
+      if (!response.ok) {
+        //  feedback if table is already booked 
+        alert("This table is already reserved on that date, or something went wrong.");
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Reservation created:", result);
+      alert("Reservation successful!");
+    } catch (error) {
+      console.error("Reservation error:", error);
+      alert("Server error. Please try again.");
+    }
+  };
+
   const values = watch();
+  const selectedDate = values["Select Date"]; // ADDED read current date from the form
+
+  // ADDE when user clicks a table in the grid, update the table number in form
+  useEffect(() => {
+    if (selectedTable) {
+      setValue("Table Number", selectedTable);
+    }
+  }, [selectedTable, setValue]);
+
+  // ADDEd notify parent component when date changes, so it can fetch reservations
+  useEffect(() => {
+    if (onDateChange) {
+      onDateChange(selectedDate || null);
+    }
+  }, [selectedDate, onDateChange]);
 
   const selectedTable = watch("table");
   const selectedGuests = watch("guests");
@@ -78,23 +141,39 @@ export default function BookingForm({ onSubmitReservation }) {
         <h1>
           <b className="text-2xl md:text-4x1">book a table</b>
         </h1>
-
-        <form className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* Name */}
           <div className="form-field">
-            <label htmlFor="name">Your Name *</label>
-            <input required id="name" type="text" placeholder="Spritney Biers" className={`form-input ${values["Your Name"] ? "is-filled" : ""}`} {...register("name", { required: true })} />
+            <label htmlFor="name">Your Name</label>
+            <input
+              id="name"
+              required
+              type="text"
+              placeholder="Spritney Biers"
+              className={`form-input ${values["Your Name"] ? "is-filled" : ""}`}
+              {...register("Your Name", { required: true })}
+            />
           </div>
 
           {/* Email */}
           <div className="form-field">
-            <label htmlFor="email">Your Email *</label>
-            <input required id="email" type="text" placeholder="mail@gmail.com" className={`form-input ${values["Your Email"] ? "is-filled" : ""}`} {...register("email", { required: true })} />
+            <label htmlFor="email">Your Email</label>
+            <input
+              id="email"
+              required
+              type="text"
+              placeholder="mail@gmail.com"
+              className={`form-input ${values["Your Name"] ? "is-filled" : ""}`}
+              {...register("Your Email", { required: true })}
+            />
           </div>
 
           {/* Table Number */}
           <div className="form-field">
-            <label htmlFor="table">Table Number *</label>
+            <label htmlFor="table">Table Number</label>
             <select required id="table" defaultValue={""} className={`form-input ${values["Your Table"] ? "is-filled" : ""}`} {...register("table", { required: true })}>
               <option value="" disabled /*gør at denne option er usynlig og kan ikke vælges ved drop-down*/>
                 1 - 15
@@ -132,14 +211,25 @@ export default function BookingForm({ onSubmitReservation }) {
 
           {/* Phone */}
           <div className="form-field">
-            <label htmlFor="phone">Your Mobile Number *</label>
-            <input required id="phone" type="tel" placeholder="12 34 56 78" className={`form-input ${values["Your Mobile Number"] ? "is-filled" : ""}`} {...register("phone", { required: true })} />
+            <label htmlFor="phone">Your Mobile Number</label>
+            <input
+              id="phone"
+              required
+              type="tel"
+              placeholder="12 34 56 78"
+              className={`form-input ${values["Your Mobile Number"] ? "is-filled" : ""}`}
+              {...register("Your Mobile Number", { required: true })}
+            />
           </div>
 
           {/* Comment */}
           <div className="form-field form-comment md:col-span-2">
             <label htmlFor="comment">Your Comment</label>
-            <textarea id="comment" className="form-input form-comment pl-0!" {...register("content", { maxLength: 250 })} />
+            <textarea
+              id="comment"
+              className="form-input form-comment pl-0!"
+              {...register("Your Comment", { maxLength: 250 })}
+            />
           </div>
 
           {/* Submit */}
