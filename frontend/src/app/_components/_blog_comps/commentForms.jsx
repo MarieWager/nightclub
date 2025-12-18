@@ -19,6 +19,9 @@ export default function CommentForm({ onSubmitComment }) {
     console.log(data);
   };
 
+  const onInvalid = (errors) => {
+    alert("Please fill the required fields correctly.");
+  };
   console.log(errors);
 
   return (
@@ -28,7 +31,7 @@ export default function CommentForm({ onSubmitComment }) {
         <h1>
           <b className="text-2xl md:text-4x1">leave a comment</b>
         </h1>
-        <form className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto " onSubmit={handleSubmit(onSubmit)}>
+        <form className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto " onSubmit={handleSubmit(onSubmit, onInvalid)}>
           {/* Name */}
           <div className="form-field">
             <label htmlFor="name">Your Name</label>
@@ -44,7 +47,7 @@ export default function CommentForm({ onSubmitComment }) {
           {/* Comment */}
           <div className="form-field md:col-span-2">
             <label htmlFor="comment">Your Comment</label>
-            <textarea id="comment" className="form-input" {...register("comment", { required: true, maxLength: 250 })} />{" "}
+            <textarea id="comment" className="form-input" {...register("comment", { required: true, maxLength: 250 })} />
           </div>
 
           {/* Submit */}

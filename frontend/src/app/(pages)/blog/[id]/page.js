@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
 import Image from "next/image";
-import Link from "next/link";
 import Banner from "@/app/_components/Banner";
 import React from "react";
-import { useForm } from "react-hook-form";
 import CommentForm from "@/app/_components/_blog_comps/CommentForms";
 
-export default function BlogPostbyId({ params }) {
+export default function BlogPostbyId() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -80,72 +77,6 @@ export default function BlogPostbyId({ params }) {
     setComments(data);
   }
 
-  {
-    /*  
-
-
-  async function getComments() {
-      const res = await fetch(`http://localhost:4000/comments?blogpostId=${id}`);
-      const data = await res.json();
-      setComments(data);
-    }
-
-
-    //////////////
-    
-    async function handleSubmit(e) {
-    e.preventDefault();
-    setMessage("");
-
-    try {
-      const res = await fetch("http://localhost:4000/newsletters", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!res.ok) throw new Error("Failed to subscribe");
-
-      setMessage("Thank you for subscribing!");
-      setEmail("");
-    } catch (error) {
-      console.error(error);
-      setMessage("Something went wrong. Please try again.");
-    }
-  }
-
-
-  //////////////////
-
-
-   <form onSubmit={handleSubmit} className="space-y-4">
-
-          
-         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mx-auto">
-
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full md:w-[600px] border-b-2 border-white px-4 py-3 outline-none text-sm text-white hover:bg-neutral-700 focus:bg-neutral-800 placeholder-white placeholder:!text-lg;" />
-
-          <input
-  className="form-button w-full md:w-40"
-  type="submit"
-  value="Subscribe"
-/>
-
-          </div>
-        </form>
-    
-    */
-  }
-
   if (!post) {
     return <div className="p-10 text-center">Loading blog post ...</div>;
   }
@@ -197,7 +128,7 @@ export default function BlogPostbyId({ params }) {
         </section>
 
         {/*Forms for Comment*/}
-        <section className="max-w-6xl place-self-center">
+        <section className="max-w-6xl">
           <CommentForm onSubmitComment={handleCommentSubmit} />
         </section>
       </main>
