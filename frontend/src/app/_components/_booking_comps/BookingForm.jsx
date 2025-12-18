@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const TABLES = [
@@ -21,221 +21,239 @@ const TABLES = [
   { id: "15", maxGuests: 8 },
 ];
 
-export default function BookingForm({ onSubmitReservation }) {
-import React, { useEffect } from "react"; 
-import { useForm } from "react-hook-form";
-
-export default function BookingForm({ selectedTable, bookedTables, onDateChange }) { // ADDED receive props from parent
+export default function BookingForm({ selectedTable, onDateChange }) {
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      table: "",
+      guests: 1,
+      date: "",
+      phone: "",
+      comment: "",
+    },
+  });
 
-    setValue, // ADDEd to update table Number 
-    formState: { errors },
-  } = useForm();
+  const [reservedTables, setReservedTables] = useState([]);
 
-  // ADDED send data to API
+  const formDate = watch("date");
+  const formTable = watch("table");
+  const formGuests = Number(watch("guests"));
+
+  const tableMaxGuests = useMemo(() => {
+    return TABLES.find((t) => t.id === formTable)?.maxGuests;
+  }, [formTable]);
+
+  // If parent selects a table (grid), update dropdown value
+  useEffect(() => {
+    if (selectedTable) setValue("table", String(selectedTable));
+  }, [selectedTable, setValue]);
+
+  // Notify parent when date changes (optional)
+  useEffect(() => {
+    if (onDateChange) onDateChange(formDate || null);
+  }, [formDate, onDateChange]);
+
+  // Fetch reservations for chosen date
+  useEffect(() => {
+    if (!formDate) {
+      setReservedTables([]);
+      return;
+    }
+
+    async function fetchReservations() {
+      const res = await fetch(`http://localhost:4000/reservations?date=${formDate}`);
+      const data = await res.json();
+
+      // normalize to strings like "1", "2", ...
+      const taken = data.map((r) => String(r.table));
+      setReservedTables(taken);
+    }
+
+    fetchReservations();
+  }, [formDate]);
+
   const onSubmit = async (data) => {
-    // ADDED  do not send if table is already booked
-    if (bookedTables && bookedTables.includes(Number(data["Table Number"]))) {
-      alert("This table is already reserved on that date. Please choose another table.");
+    // block if too many guests
+    const max = TABLES.find((t) => t.id === String(data.table))?.maxGuests;
+    if (max && Number(data.guests) > max) {
+      alert(`This table allows max ${max} guests.`);
       return;
     }
 
     try {
       const response = await fetch("http://localhost:4000/reservations", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: data["Your Name"],
-          email: data["Your Email"],
-          table: data["Table Number"],
-          guests: data["Number of Guests"],
-          date: new Date(data["Select Date"]).toISOString(), // convert <datwe to ISO string
-          phone: data["Your Mobile Number"],
-          comment: data["Your Comment"] || "",
+          name: data.name,
+          email: data.email,
+          table: String(data.table),
+          guests: String(data.guests),
+          date: data.date, // keep as YYYY-MM-DD (matches your existing reservation)
+          phone: data.phone,
+          comment: data.comment || "",
         }),
       });
 
       if (!response.ok) {
-        //  feedback if table is already booked 
-        alert("This table is already reserved on that date, or something went wrong.");
+        alert("Something went wrong while creating reservation.");
         return;
       }
 
-      const result = await response.json();
-      console.log("Reservation created:", result);
       alert("Reservation successful!");
+      reset();
     } catch (error) {
-      console.error("Reservation error:", error);
+      console.error(error);
       alert("Server error. Please try again.");
     }
   };
 
-  const values = watch();
-  const selectedDate = values["Select Date"]; // ADDED read current date from the form
-
-  // ADDE when user clicks a table in the grid, update the table number in form
-  useEffect(() => {
-    if (selectedTable) {
-      setValue("Table Number", selectedTable);
-    }
-  }, [selectedTable, setValue]);
-
-  // ADDEd notify parent component when date changes, so it can fetch reservations
-  useEffect(() => {
-    if (onDateChange) {
-      onDateChange(selectedDate || null);
-    }
-  }, [selectedDate, onDateChange]);
-
-  const selectedTable = watch("table");
-  const selectedGuests = watch("guests");
-  const tableMaxGuests = TABLES.find((table) => table.id === selectedTable)?.maxGuests;
-
-  console.log("Selected table:", selectedTable);
-  console.log("Guests:", selectedGuests);
-  console.log("Max allowed:", tableMaxGuests);
-  console.log("Errors:", errors);
-
-  const onSubmit = (data) => {
-    if (tableMaxGuests && data.guests > tableMaxGuests) {
-      console.log("guests and table error", {
-        table: data.table,
-        guests: data.guests,
-        max: tableMaxGuests,
-      });
-    }
-
-    onSubmitReservation(data, reset);
-  };
-
-  const [reservedTables, setReservedTables] = useState([]);
-  const selectedDate = watch("date");
-
-  useEffect(() => {
-    if (!selectedDate) return;
-
-    async function fetchReservations() {
-      const res = await fetch(`http://localhost:4000/reservations?date=${selectedDate}`);
-      const data = await res.json();
-      console.log("Reservations for selected date: ", data);
-
-      const takenTables = data.map((reserved) => reserved.table);
-      console.log("Reserved tables: ", takenTables);
-      setReservedTables(takenTables);
-    }
-
-    fetchReservations();
-  }, [selectedDate]);
-
   return (
-    <>
-      <main className="max-w-6xl place-self-center">
-        <h1>
-          <b className="text-2xl md:text-4x1">book a table</b>
-        </h1>
-        <form
-          className="grid grid-cols-1 gap-5 md:grid-cols-2 grid-rows-auto"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {/* Name */}
-          <div className="form-field">
-            <label htmlFor="name">Your Name</label>
-            <input
-              id="name"
-              required
-              type="text"
-              placeholder="Spritney Biers"
-              className={`form-input ${values["Your Name"] ? "is-filled" : ""}`}
-              {...register("Your Name", { required: true })}
-            />
-          </div>
+    <main className="max-w-6xl place-self-center">
+      <h1>
+        <b className="text-2xl md:text-4xl">book a table</b>
+      </h1>
 
-          {/* Email */}
-          <div className="form-field">
-            <label htmlFor="email">Your Email</label>
-            <input
-              id="email"
-              required
-              type="text"
-              placeholder="mail@gmail.com"
-              className={`form-input ${values["Your Name"] ? "is-filled" : ""}`}
-              {...register("Your Email", { required: true })}
-            />
-          </div>
+      <form className="grid grid-cols-1 gap-5 md:grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
+        {/* Name */}
+        <div className="form-field">
+          <label htmlFor="name">Your Name</label>
+          <input
+            id="name"
+            required
+            type="text"
+            placeholder="Britney Spears"
+            className="form-input"
+            {...register("name", { required: true })}
+          />
+        </div>
 
-          {/* Table Number */}
-          <div className="form-field">
-            <label htmlFor="table">Table Number</label>
-            <select required id="table" defaultValue={""} className={`form-input ${values["Your Table"] ? "is-filled" : ""}`} {...register("table", { required: true })}>
-              <option value="" disabled /*gør at denne option er usynlig og kan ikke vælges ved drop-down*/>
-                1 - 15
+        {/* Email */}
+        <div className="form-field">
+          <label htmlFor="email">Your Email</label>
+          <input
+            id="email"
+            required
+            type="email"
+            placeholder="mail@gmail.com"
+            className="form-input"
+            {...register("email", { required: true })}
+          />
+        </div>
+
+        {/* Table Number */}
+        <div className="form-field">
+          <label htmlFor="table">Table Number</label>
+          <select
+            required
+            id="table"
+            defaultValue=""
+            className="form-input"
+            {...register("table", { required: true })}
+          >
+            <option value="" disabled>
+              1 - 15
+            </option>
+            <option value="0" disabled>
+              The table number determines amount of guests
+            </option>
+
+            {/* options/tables generated via TABLES and disabled if reserved */}
+            {TABLES.map((t) => (
+              <option key={t.id} value={t.id} disabled={reservedTables.includes(t.id)}>
+                Table {t.id}{" "}
+                {reservedTables.includes(t.id)
+                  ? "(not available this date)"
+                  : `(max ${t.maxGuests} guests)`}
               </option>
-              <option value="0" disabled /*gør at denne option kan ikke vælges ved drop-down*/>
-                The table number determines amount of guests
-              </option>
-              {/*options/tables genereres via TABLES(=array af nr/id + max guests) 
-                & hvis table/date reserveret = option disabled */}
-              {TABLES.map((table) => (
-                <option key={table.id} value={table.id} disabled={reservedTables.includes(table.id)}>
-                  {/*option har normalt "max antal", men hvis table=reserved sættes not available ind */}
-                  Table {table.id} {reservedTables.includes(table.id) ? "(not available this date)" : `(max ${table.maxGuests} guests)`}
-                </option>
-              ))}
-            </select>
-            {tableMaxGuests && selectedGuests > tableMaxGuests && <b className="text-[FF2A70] text-[0.70rem] font-thin col-span-2">This table allows max {tableMaxGuests} guests.</b>}
-          </div>
+            ))}
+          </select>
 
-          {/* Number of Guests */}
-          <div className="form-field">
-            <label htmlFor="guests">Number of Guests *</label>
-            <input required id="guests" type="number" placeholder="min 1, max 8" className={`form-input ${values["Your Guests"] ? "is-filled" : ""}`} min={1} max={8} {...register("guests", { required: true, validate: (value) => !tableMaxGuests || value <= tableMaxGuests || `Max ${tableMaxGuests} guests for this table` })} />
-            {/*ved at tilføje min/max her vil user ikke kunne vælge højere end 15
-            uden vil det kun være efter submit/validering at der React siger der er fejl*/}
-            {tableMaxGuests && selectedGuests > tableMaxGuests && <b className="text-[FF2A70] text-[0.70rem] font-thin col-span-2">The table can not seat above {tableMaxGuests} guests.</b>}
-          </div>
+          {tableMaxGuests && formGuests > tableMaxGuests && (
+            <b className="text-[0.70rem] font-thin col-span-2">
+              This table allows max {tableMaxGuests} guests.
+            </b>
+          )}
+        </div>
 
-          {/* Date */}
-          <div className="form-field">
-            <label htmlFor="date">Select Date *</label>
-            <input required id="date" type="date" className={`form-input ${values["Your Date"] ? "is-filled" : ""}`} {...register("date", { required: true })} />
-            {reservedTables.length > 0 && <b className="text-[FF2A70] text-[0.70rem] font-thin col-span-2">These tables are already reserved: {reservedTables.join(", ")}</b>}
-          </div>
+        {/* Number of Guests */}
+        <div className="form-field">
+          <label htmlFor="guests">Number of Guests *</label>
+          <input
+            required
+            id="guests"
+            type="number"
+            min={1}
+            max={8}
+            className="form-input"
+            {...register("guests", {
+              required: true,
+              valueAsNumber: true,
+              validate: (v) =>
+                !tableMaxGuests ||
+                v <= tableMaxGuests ||
+                `Max ${tableMaxGuests} guests for this table`,
+            })}
+          />
+          {/* validation error from react-hook-form */}
+          {errors.guests && (
+            <b className="text-[0.70rem] font-thin col-span-2">
+              {String(errors.guests.message)}
+            </b>
+          )}
+        </div>
 
-          {/* Phone */}
-          <div className="form-field">
-            <label htmlFor="phone">Your Mobile Number</label>
-            <input
-              id="phone"
-              required
-              type="tel"
-              placeholder="12 34 56 78"
-              className={`form-input ${values["Your Mobile Number"] ? "is-filled" : ""}`}
-              {...register("Your Mobile Number", { required: true })}
-            />
-          </div>
+        {/* Date */}
+        <div className="form-field">
+          <label htmlFor="date">Select Date *</label>
+          <input
+            required
+            id="date"
+            type="date"
+            className="form-input"
+            {...register("date", { required: true })}
+          />
+        </div>
 
-          {/* Comment */}
-          <div className="form-field form-comment md:col-span-2">
-            <label htmlFor="comment">Your Comment</label>
-            <textarea
-              id="comment"
-              className="form-input form-comment pl-0!"
-              {...register("Your Comment", { maxLength: 250 })}
-            />
-          </div>
+        {/* Phone */}
+        <div className="form-field">
+          <label htmlFor="phone">Your Mobile Number</label>
+          <input
+            id="phone"
+            required
+            type="tel"
+            placeholder="12 34 56 78"
+            className="form-input"
+            {...register("phone", { required: true })}
+          />
+        </div>
 
-          {/* Submit */}
-          <input className="form-button" type="submit" value="reserve" disabled={tableMaxGuests && selectedGuests > tableMaxGuests} />
-        </form>
-      </main>
-    </>
+        {/* Comment */}
+        <div className="form-field md:col-span-2">
+          <label htmlFor="comment">Your Comment</label>
+          <textarea
+            id="comment"
+            className="form-input"
+            {...register("comment", { maxLength: 250 })}
+          />
+        </div>
+
+        {/* Submit */}
+        <input
+          className="form-button md:col-span-2"
+          type="submit"
+          value="reserve"
+          disabled={tableMaxGuests && formGuests > tableMaxGuests}
+        />
+      </form>
+    </main>
   );
 }
