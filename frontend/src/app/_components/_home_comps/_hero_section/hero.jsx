@@ -33,15 +33,26 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
-      {/* Rotating background */}
-      <Image
-        key={images[index]} // Forces re-render when image changes
-        src={images[index]} // current background image
-        fill
-        className="object-cover transition-opacity duration-[1500ms]"
-        alt="Night Club Background"
-      />
+<section className="relative w-full h-[100dvh] overflow-hidden bg-black">
+
+     {/* Rotating background */}
+{images.map((img, i) => (
+  <Image
+    key={img}
+    src={img}
+    fill
+    sizes="100vw"
+    priority={i === 0}
+    alt="Night Club Background"
+    className={[
+      "absolute inset-0 object-cover transition-opacity duration-[1500ms]",
+      "scale-[1.06]",                 // helped to delete the white gap after second img
+      i === index ? "opacity-100" : "opacity-0",
+    ].join(" ")}
+  />
+))}
+
+
 
       {/* Centered logo */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white flex flex-col items-center">
