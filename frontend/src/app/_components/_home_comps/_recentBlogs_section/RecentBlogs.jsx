@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function RecentBlogs({ params }) {
+export default function RecentBlogs() {
   const [blogposts, setBlogposts] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function RecentBlogs({ params }) {
       if (!res.ok) throw new Error("Recent Blog Posts failed to load");
       const blogposts = await res.json();
 
-      const postComments = await Promise.all(
+      const amountComments = await Promise.all(
         blogposts.map(async (post) => {
           const res = await fetch(`http://localhost:4000/blogposts/${post.id}?embed=comments`);
 
@@ -30,7 +30,7 @@ export default function RecentBlogs({ params }) {
           };
         })
       );
-      setBlogposts(postComments);
+      setBlogposts(amountComments);
     }
     getAllBlogPosts();
   }, []);
@@ -44,15 +44,15 @@ export default function RecentBlogs({ params }) {
               <Image src={post.asset.url} alt={post.title} width={1600} height={1400}></Image>
             </Link>
             <h2 className="line-clamp-1">{post.title}</h2>
-          {/*byline*/}
-            <article className="flex gap-3 mb-3">
+            {/*byline*/}
+            <article className="flex gap-3 mb-3 [&>*]:line-clamp-1">
               <h4>BY:</h4>
               <h4>{post.author}</h4>
               <h4>/</h4>
               <h4>{post.commentCount}</h4>
               <h4>Comments</h4>
               <h4>/</h4>
-              <h4>{post.date}</h4>
+              <h4>{new Date(post.date).toLocaleString("en-UK", { day: "2-digit", month: "short", year: "numeric" })}</h4>
             </article>
             {/*text content*/}
             <p className="line-clamp-3 leading-5">{post.content}</p>

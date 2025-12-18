@@ -61,7 +61,6 @@
       "location": "Center Stage"
     }
   ],
-  
   "blogposts": [
     {
       "id": 1,
@@ -159,6 +158,21 @@
       "content": "What an amazing evening!",
       "date": "2025-01-03T16:43:02.002Z",
       "id": 2
+    },
+    {
+      "blogpostId": 3,
+      "name": "Bob",
+      "content": "So Ready",
+      "date": "2025-12-17T18:20:02.230Z",
+      "id": 3
+    },
+    {
+      "blogpostId": 2,
+      "name": "tusind jimberlake",
+      "email": "jt@gmail.com",
+      "content": "Total Party !",
+      "date": "2025-12-18T08:26:46.603Z",
+      "id": 4
     }
   ],
   "gallery": [
@@ -322,6 +336,13 @@
       "id": 3
     },
     {
+      "name": "Ulrik Lars",
+      "email": "UlrikL@gmail.com",
+      "table": "3",
+      "guests": "5",
+      "date": "2025-12-31",
+      "phone": "11 22 33 44",
+      "id": 4
       "name": "Tanya",
       "email": "tanya.hitra@gmail.com",
       "table": 12,
