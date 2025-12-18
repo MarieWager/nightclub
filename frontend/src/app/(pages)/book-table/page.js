@@ -75,7 +75,7 @@ export default function BookTable() {
       
         <BookTableSection />
 
-        <BookingForm onSubmitReservation={handleReservationSubmit} />
+      
         {/* Feedback message */}
         {message && <p className="place-self-center text-sm mt-4 text-white">{message}</p>}
       </main>
