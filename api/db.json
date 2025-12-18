@@ -336,6 +336,18 @@
       "id": 3
     },
     {
+<<<<<<< HEAD
+=======
+      "name": "Ulrik Lars",
+      "email": "UlrikL@gmail.com",
+      "table": "3",
+      "guests": "5",
+      "date": "2025-12-31",
+      "phone": "11 22 33 44",
+      "id": 4},
+      {
+
+>>>>>>> a787c40 (api fejl)
       "name": "Tanya",
       "email": "tanya.hitra@gmail.com",
       "table": 12,
