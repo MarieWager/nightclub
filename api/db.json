@@ -336,8 +336,7 @@
       "id": 3
     },
     {
-<<<<<<< HEAD
-=======
+
       "name": "Ulrik Lars",
       "email": "UlrikL@gmail.com",
       "table": "3",
@@ -347,7 +346,6 @@
       "id": 4},
       {
 
->>>>>>> a787c40 (api fejl)
       "name": "Tanya",
       "email": "tanya.hitra@gmail.com",
       "table": 12,
