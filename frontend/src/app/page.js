@@ -1,7 +1,6 @@
 import TitleLine from "./_components/TitleLine";
 import Hero from "./_components/_home_comps/_hero_section/Hero";
 import GalleryGrid from "./_components/GalleryGrid";
-
 import MusicPlayer from "./_components/MusicPlayer";
 import VideoPlayer from "./_components/VideoPlayer";
 import Testimonials from "./_components/_home_comps/_testimonials_section/Testimonial";
