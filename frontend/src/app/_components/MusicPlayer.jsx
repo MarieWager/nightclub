@@ -1,9 +1,10 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Volume2, Shuffle } from "lucide-react";
+import LeftTriangle from "@/app/_components/_ui/LeftTriangle";
+import RightTriangle from "@/app/_components/_ui/RightTriangle";
 
 const TRACKS = [
   {
@@ -24,42 +25,60 @@ const TRACKS = [
     cover: "/music-covers/track4.jpg",
     audio: "/media/fashion-red-tape.mp3",
   },
+  {
+    id: 4,
+    title: "Night Pulse",
+    cover: "/music-covers/track1.jpg",
+    audio: "/media/black-box-funky.mp3",
+  },
+  {
+    id: 5,
+    title: "Neon Lights",
+    cover: "/music-covers/track2.jpg",
+    audio: "/media/euphoria.mp3",
+  },
+  {
+    id: 6,
+    title: "Midnight Mode",
+    cover: "/music-covers/track4.jpg",
+    audio: "/media/fashion-red-tape.mp3",
+  },
+  {
+    id: 7,
+    title: "After Hours",
+    cover: "/music-covers/track4.jpg",
+    audio: "/media/fashion-red-tape.mp3",
+  },
 ];
 
 export default function MusicPlayer() {
-  // current track index
   const [index, setIndex] = useState(0);
 
-  // play / pause
   const [playing, setPlaying] = useState(false);
 
-  // time + duration
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // volume 0–1
   const [volume, setVolume] = useState(0.8);
 
-  // shuffle on/off
   const [shuffle, setShuffle] = useState(false);
 
-  // loading / idle / error state
   const [status, setStatus] = useState("idle");
 
-  // audio element ref
   const audioRef = useRef(null);
 
-  // current track data
+  // refs for thumbnail scrolling
+  const thumbItemsRef = useRef([]);
+
   const track = TRACKS[index];
 
-  // format seconds -> mm:ss
+  // mm:ss
   const format = (s = 0) => {
     const m = Math.floor(s / 60).toString().padStart(2, "0");
     const sec = Math.floor(s % 60).toString().padStart(2, "0");
     return `${m}:${sec}`;
   };
 
-  // random track (not same as current)
   const playRandomTrack = () => {
     let random;
     do {
@@ -88,7 +107,7 @@ export default function MusicPlayer() {
 
   const toggleShuffle = () => setShuffle((prev) => !prev);
 
-  // progress bar seek
+  // progress bar
   const seek = (e) => {
     const v = Number(e.target.value);
     const audio = audioRef.current;
@@ -158,12 +177,29 @@ export default function MusicPlayer() {
     }
   }, [playing, volume, status]);
 
+  // scroll so active track is always visible
+  useEffect(() => {
+    const el = thumbItemsRef.current[index];
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [index]);
+
   return (
     <section className="bg-black py-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 lg:flex-row">
         {/* big cover image */}
         <div className="relative h-64 w-full overflow-hidden rounded-lg lg:h-80 lg:w-1/2">
-          <Image src={track.cover} alt={track.title} fill className="object-cover" />
+          <Image
+            src={track.cover}
+            alt={track.title}
+            fill
+            className="object-cover"
+          />
         </div>
 
         {/* player side */}
@@ -197,7 +233,8 @@ export default function MusicPlayer() {
             {/* play / pause */}
             <button
               onClick={() => setPlaying((p) => !p)}
-              className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white text-2xl hover:border-[var(--pink)] hover:text-[var(--pink)]"
+              className="flex h-14 w-14 items-center justify-center rounded-full border-2
+               border-white text-2xl hover:border-[var(--pink)] hover:text-[var(--pink)]"
             >
               {playing ? "⏸" : "▶"}
             </button>
@@ -246,52 +283,110 @@ export default function MusicPlayer() {
           {/* small covers */}
           <div className="mt-4 flex items-center justify-center gap-4">
             {/* prev arrow (desktop) */}
-           <button
-  onClick={prev}
-  className="hidden h-8 w-8 items-center justify-center 
-             border-2 border-white text-white 
-             hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
-             md:flex"
->
-  ◀
-</button>
+            <button
+              onClick={prev}
+              className="hidden h-8 w-8 items-center justify-center 
+                         border-2 border-white text-white 
+                         hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
+                         md:flex"
+            >
+              ◀
+            </button>
 
+            <div className="flex flex-1 gap-2 overflow-x-auto snap-x snap-mandatory scroll-smooth">
+              {TRACKS.map((t, idx) => {
+                const isActive = idx === index;
 
-            <div className="flex flex-1 gap-2 overflow-x-auto">
-              {TRACKS.map((t, idx) => (
-                <button
-                  key={t.id}
-                  onClick={() => {
-                    setIndex(idx);
-                    setPlaying(true);
-                  }}
-                  className={`relative h-24 min-w-[90px] overflow-hidden rounded-sm ${
-                    idx === index
-                      ? "ring-4 ring-[var(--pink)]"
-                      : "opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <Image
-                    src={t.cover}
-                    alt={t.title}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
+                return (
+                  <button
+                    ref={(el) => (thumbItemsRef.current[idx] = el)}
+                    key={t.id}
+                    onClick={() => {
+                      setIndex(idx);
+                      setPlaying(true);
+                    }}
+                    className={`group relative h-24 min-w-[90px] snap-center overflow-hidden rounded-sm ${
+                      isActive ? "" : "opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    {/* image */}
+                    <Image
+                      src={t.cover}
+                      alt={t.title}
+                      fill
+                      className={`object-cover transition duration-300 ease-out ${
+                        isActive ? "brightness-50" : "group-hover:brightness-50"
+                      }`}
+                    />
+
+                    {/* overlay */}
+                    <div
+                      className={`absolute inset-0 transition duration-300 ${
+                        isActive
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-100"
+                      } bg-black/20`}
+                    />
+
+                    {/* triangles */}
+                    <div
+                      className={`absolute inset-0 pointer-events-none transition duration-300 ${
+                        isActive
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-100"
+                      }`}
+                    >
+                      <div className="absolute left-0 top-0 scale-75 origin-top-left">
+                        <LeftTriangle />
+                      </div>
+
+                      <div className="absolute right-0 bottom-0 scale-75 origin-bottom-right">
+                        <RightTriangle />
+                      </div>
+                    </div>
+
+                    {/* play icon in center */}
+                    <div
+                      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                                  transition duration-300 ${
+                                    isActive
+                                      ? "opacity-100"
+                                      : "opacity-0 group-hover:opacity-100"
+                                  }`}
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[var(--pink)]">
+                        <div className="ml-[2px] h-0 w-0 border-y-[6px] border-y-transparent border-l-[10px] border-l-[var(--pink)]" />
+                      </div>
+                    </div>
+
+                    {/* title */}
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 z-10 px-2 py-1
+                                  text-center text-xs font-semibold uppercase tracking-wide
+                                  bg-black/60 text-white
+                                  transition duration-300 ${
+                                    isActive
+                                      ? "opacity-100"
+                                      : "opacity-0 group-hover:opacity-100"
+                                  }`}
+                    >
+                      {t.title}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             {/* next arrow (desktop) */}
-          <button
-  onClick={next}
-  className="hidden h-8 w-8 items-center justify-center 
-             border-2 border-white text-white 
-             hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
-             md:flex"
->
-  ▶
-</button>
-
+            <button
+              onClick={next}
+              className="hidden h-8 w-8 items-center justify-center 
+                         border-2 border-white text-white 
+                         hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
+                         md:flex"
+            >
+              ▶
+            </button>
           </div>
         </div>
       </div>
