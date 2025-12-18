@@ -50,28 +50,25 @@ export default function VideoPlayer() {
       </div>
 
       {/* nav buttons */}
-<div className="flex items-center gap-4 mt-4">
-  <button
-    onClick={showPrevVideo}
-    className="hidden h-8 w-8 items-center justify-center 
-               border-2 border-white text-white 
-               hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
-               md:flex"
-  >
-    ◀
-  </button>
+      <div className="flex items-center gap-4 mt-4">
+        <button
+          onClick={showPrevVideo}
+          className="flex h-8 w-8 items-center justify-center 
+                     border-2 border-white text-white 
+                     hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5"
+        >
+          ◀
+        </button>
 
-  <button
-    onClick={showNextVideo}
-    className="hidden h-8 w-8 items-center justify-center 
-               border-2 border-white text-white 
-               hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
-               md:flex"
-  >
-    ▶
-  </button>
-</div>
-
+        <button
+          onClick={showNextVideo}
+          className="flex h-8 w-8 items-center justify-center 
+                     border-2 border-white text-white 
+                     hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5"
+        >
+          ▶
+        </button>
+      </div>
     </div>
   );
 }

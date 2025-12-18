@@ -61,7 +61,6 @@
       "location": "Center Stage"
     }
   ],
-  
   "blogposts": [
     {
       "id": 1,
@@ -340,6 +339,16 @@
       "phone": "28970216",
       "comment": "",
       "id": 5
+    },
+    {
+      "name": "Tetiana Khytra",
+      "email": "tanya.hitra@gmail.com",
+      "table": 1,
+      "guests": "1",
+      "date": "2025-12-18T00:00:00.000Z",
+      "phone": "28970216",
+      "comment": "",
+      "id": 6
     }
   ],
   "newsletters": [

@@ -63,8 +63,8 @@ export default async function SinglePhotoPage({ params }) {
           {/* left arrow */}
           <a
             href={`/gallery/${prevId}`}
-            className="absolute left-4 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center
-                       border-2 border-white text-white hover:border-[var(--pink)] hover:text-[var(--pink)] md:flex"
+            className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center
+                       border-2 border-white text-white hover:border-[var(--pink)] hover:text-[var(--pink)]"
           >
             ◀
           </a>
@@ -72,8 +72,8 @@ export default async function SinglePhotoPage({ params }) {
           {/* right arrow */}
           <a
             href={`/gallery/${nextId}`}
-            className="absolute right-4 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center
-                       border-2 border-white text-white hover:border-[var(--pink)] hover:text-[var(--pink)] md:flex"
+            className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center
+                       border-2 border-white text-white hover:border-[var(--pink)] hover:text-[var(--pink)]"
           >
             ▶
           </a>

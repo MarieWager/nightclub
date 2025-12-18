@@ -6,8 +6,11 @@ import BookingForm from "./BookingForm";
 
 export default function BookTableSection() {
   const [selectedTable, setSelectedTable] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null); // date selected in the form
-  const [bookedTables, setBookedTables] = useState([]);   // tables that are already reserved on this date
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [bookedTables, setBookedTables] = useState([]);
+
+  // show 8 tables on mobile, then user can see rest
+  const [showAllTables, setShowAllTables] = useState(false);
 
   const TABLE_MAP = {
     1: "/table/table_1.png",
@@ -56,7 +59,7 @@ export default function BookTableSection() {
           reservation.date.startsWith(selectedDate)
         );
 
-        // extract table numbers
+        // table numbers
         const reservedTables = reservedForDate.map((reservation) =>
           Number(reservation.table)
         );
@@ -77,10 +80,15 @@ export default function BookTableSection() {
     }
   }, [bookedTables, selectedTable]);
 
+  // limit visible tables on mobile
+  const allTables = Array.from({ length: 15 }, (_, i) => i + 1);
+  const visibleTables = showAllTables ? allTables : allTables.slice(0, 8);
+
   return (
     <section className="space-y-10 max-w-6xl mx-auto">
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-10">
-        {Array.from({ length: 15 }, (_, i) => i + 1).map((tableNo) => {
+      {/* responsive grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 md:gap-10">
+        {visibleTables.map((tableNo) => {
           const imgSrc = TABLE_MAP[tableNo];
           const isBooked = bookedTables.includes(tableNo); // check if table is taken on this date
 
@@ -93,9 +101,9 @@ export default function BookTableSection() {
               }}
               disabled={isBooked}
               className={`relative aspect-square flex items-center justify-center
-              rounded-xl overflow-hidden transition 
-              ${selectedTable === tableNo ? "ring-2 ring-[var(--pink)]" : ""}
-              ${isBooked ? "opacity-40 cursor-not-allowed" : ""}`}
+                rounded-xl overflow-hidden transition 
+                ${selectedTable === tableNo ? "ring-2 ring-[var(--pink)]" : ""}
+                ${isBooked ? "opacity-40 cursor-not-allowed" : ""}`}
             >
               <Image
                 src={imgSrc}
@@ -104,14 +112,29 @@ export default function BookTableSection() {
                 className="object-contain"
               />
 
-              <span className="absolute inset-0 flex items-center justify-center
-              text-white font-bold text-xl bg-black/50">
+              <span
+                className="absolute inset-0 flex items-center justify-center
+                text-white font-bold text-xl bg-black/50"
+              >
                 {tableNo}
               </span>
             </button>
           );
         })}
       </div>
+
+      {/* show all tables button for mobile */}
+      {!showAllTables && (
+        <div className="flex justify-center md:hidden">
+          <button
+            type="button"
+            onClick={() => setShowAllTables(true)}
+            className="form-button w-full max-w-xs"
+          >
+            Show all tables
+          </button>
+        </div>
+      )}
 
       <BookingForm
         selectedTable={selectedTable}

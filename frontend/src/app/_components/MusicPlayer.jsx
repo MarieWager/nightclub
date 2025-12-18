@@ -70,6 +70,9 @@ export default function MusicPlayer() {
   // refs for thumbnail scrolling
   const thumbItemsRef = useRef([]);
 
+  // ADDED: only scroll thumbnails after user interacts
+  const [didUserInteract, setDidUserInteract] = useState(false);
+
   const track = TRACKS[index];
 
   // mm:ss
@@ -177,8 +180,10 @@ export default function MusicPlayer() {
     }
   }, [playing, volume, status]);
 
-  // scroll so active track is always visible
+  // scroll so active track is always visible (only after user interacts)
   useEffect(() => {
+    if (!didUserInteract) return;
+
     const el = thumbItemsRef.current[index];
     if (!el) return;
 
@@ -187,7 +192,7 @@ export default function MusicPlayer() {
       inline: "center",
       block: "nearest",
     });
-  }, [index]);
+  }, [index, didUserInteract]);
 
   return (
     <section className="bg-black py-16">
@@ -226,13 +231,22 @@ export default function MusicPlayer() {
           {/* main controls */}
           <div className="mt-6 flex items-center justify-center gap-6 text-white">
             {/* prev */}
-            <button onClick={prev} className="text-xl hover:text-[var(--pink)]">
+            <button
+              onClick={() => {
+                setDidUserInteract(true);
+                prev();
+              }}
+              className="text-xl hover:text-[var(--pink)]"
+            >
               ⏮
             </button>
 
             {/* play / pause */}
             <button
-              onClick={() => setPlaying((p) => !p)}
+              onClick={() => {
+                setDidUserInteract(true);
+                setPlaying((p) => !p);
+              }}
               className="flex h-14 w-14 items-center justify-center rounded-full border-2
                border-white text-2xl hover:border-[var(--pink)] hover:text-[var(--pink)]"
             >
@@ -240,12 +254,24 @@ export default function MusicPlayer() {
             </button>
 
             {/* next */}
-            <button onClick={next} className="text-xl hover:text-[var(--pink)]">
+            <button
+              onClick={() => {
+                setDidUserInteract(true);
+                next();
+              }}
+              className="text-xl hover:text-[var(--pink)]"
+            >
               ⏭
             </button>
 
             {/* shuffle */}
-            <button onClick={toggleShuffle} title="Mix track">
+            <button
+              onClick={() => {
+                setDidUserInteract(true);
+                toggleShuffle();
+              }}
+              title="Mix track"
+            >
               <Shuffle
                 className={`h-6 w-6 ${
                   shuffle ? "text-[var(--pink)]" : "text-white"
@@ -262,7 +288,10 @@ export default function MusicPlayer() {
                 max={1}
                 step={0.01}
                 value={volume}
-                onChange={(e) => setVolume(Number(e.target.value))}
+                onChange={(e) => {
+                  setDidUserInteract(true);
+                  setVolume(Number(e.target.value));
+                }}
                 className="w-28 accent-[var(--pink)]"
               />
             </div>
@@ -284,7 +313,10 @@ export default function MusicPlayer() {
           <div className="mt-4 flex items-center justify-center gap-4">
             {/* prev arrow (desktop) */}
             <button
-              onClick={prev}
+              onClick={() => {
+                setDidUserInteract(true);
+                prev();
+              }}
               className="hidden h-8 w-8 items-center justify-center 
                          border-2 border-white text-white 
                          hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
@@ -302,6 +334,7 @@ export default function MusicPlayer() {
                     ref={(el) => (thumbItemsRef.current[idx] = el)}
                     key={t.id}
                     onClick={() => {
+                      setDidUserInteract(true);
                       setIndex(idx);
                       setPlaying(true);
                     }}
@@ -379,7 +412,10 @@ export default function MusicPlayer() {
 
             {/* next arrow (desktop) */}
             <button
-              onClick={next}
+              onClick={() => {
+                setDidUserInteract(true);
+                next();
+              }}
               className="hidden h-8 w-8 items-center justify-center 
                          border-2 border-white text-white 
                          hover:text-[var(--pink)] hover:border-[var(--pink)] hover:bg-white/5 
