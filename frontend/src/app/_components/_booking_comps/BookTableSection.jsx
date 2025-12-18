@@ -12,6 +12,15 @@ export default function BookTableSection() {
   // show 8 tables on mobile, then user can see rest
   const [showAllTables, setShowAllTables] = useState(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768); // md breakpoint
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const TABLE_MAP = {
     1: "/table/table_1.png",
     2: "/table/table_1.png",
@@ -82,7 +91,8 @@ export default function BookTableSection() {
 
   // limit visible tables on mobile
   const allTables = Array.from({ length: 15 }, (_, i) => i + 1);
-  const visibleTables = showAllTables ? allTables : allTables.slice(0, 8);
+  const visibleTables =
+    !isMobile ? allTables : showAllTables ? allTables : allTables.slice(0, 8);
 
   return (
     <section className="space-y-10 max-w-6xl mx-auto">
