@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import TitleLine from "../../TitleLine";
+import TitleLine from "../../TitleLine.jsx";
 import { FaSquareFull } from "react-icons/fa";
-import EvAnimation from "./EvAnimation";
+import EvAnimation from "./EvAnimation.jsx";
 import Link from "next/link";
 
 export default function Events() {

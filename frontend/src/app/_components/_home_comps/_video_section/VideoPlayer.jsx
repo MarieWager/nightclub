@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import LeftTriangle from "../../_ui/LeftTriangle";
-import RightTriangle from "../../_ui/RightTriangle";
+import LeftTriangle from "../../_ui/LeftTriangle.jsx";
+import RightTriangle from "../../_ui/RightTriangle.jsx";
 
 const VIDEOS = [
   { id: 1, src: "/media/video-crowd.mp4" },

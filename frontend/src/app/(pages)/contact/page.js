@@ -1,6 +1,6 @@
 "use client";
 
-import Banner from "@/app/_components/Banner";
+import Banner from "@/app/_components/Banner.jsx";
 
 export default function Blog() {
   return (

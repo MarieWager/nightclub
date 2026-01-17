@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import TitleLine from "./TitleLine";
+import TitleLine from "./TitleLine.jsx";
 
 const Banner = ({ title }) => {
   return (
