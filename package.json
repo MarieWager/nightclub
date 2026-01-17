@@ -1,4 +1,11 @@
 {
+  "name": "nightclub",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "api",
+    "frontend"
+  ],
   "dependencies": {
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.556.0",
