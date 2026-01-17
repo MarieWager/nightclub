@@ -4,8 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation"; 
 import { useState, useEffect } from "react"; // ADDED for mobile menu
-import LeftTriangle from "./_ui/LeftTriangle.jsx";
-import RightTriangle from "./_ui/RightTriangle.jsx";
+import LeftTriangle from "./_ui/LeftTriangle";
+import RightTriangle from "./_ui/RightTriangle";
 
 //I made the links as an array so the Navbar can generate them dynamically using .map()
 //label is the text shown in the menu

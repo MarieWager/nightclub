@@ -1,4 +1,4 @@
-import GalleryItem from "@/app/_components/_home_comps/_gallery_section/GalleryItem.jsx";
+import GalleryItem from "@/app/_components/_home_comps/_gallery_section/GalleryItem";
 
 // just getting all gallery photos
 async function getGallery() {

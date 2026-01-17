@@ -4,8 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { MdOutlineRoomService } from "react-icons/md";
 import { PiCheersDuotone } from "react-icons/pi";
-import WelAnimation from "./WelAnimation.jsx";
-import EvAnimation from "../_event_section/EvAnimation.jsx";
+import WelAnimation from "./WelAnimation";
+import EvAnimation from "../_event_section/EvAnimation";
 
 const OFFERS = [
   {

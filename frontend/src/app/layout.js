@@ -1,7 +1,7 @@
 import "./globals.css";
-import Nav from "./_components/Nav.jsx";
-import Footer from "./_components/Footer.jsx";
-import NewsletterForm from "./_components/NewsletterForm.jsx"
+import Nav from "./_components/Nav";
+import Footer from "./_components/Footer";
+import NewsletterForm from "./_components/NewsletterForm"
 
 export const metadata = {
   title: "Night Club",

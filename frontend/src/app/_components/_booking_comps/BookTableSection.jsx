@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import BookingForm from "./BookingForm.jsx";
+import BookingForm from "./BookingForm";
 
 export default function BookTableSection() {
   const [selectedTable, setSelectedTable] = useState(null);
